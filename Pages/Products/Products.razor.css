@@ -41,10 +41,26 @@
             .register{
                 cursor:pointer;
                 display: grid;
-                background-color: red;
                 grid-template-columns: repeat(auto-fit, minmax(80px,1fr));
+                transition: all 0.5s ease-in-out;
+                
+                .column{
+                    background:none;
+                }
+
+                .column.actions{
+                    color:#999;
+                }
             }
+            
+
+            .register:hover{
+                background-color: #f1f1f1;
+            }
+
         }
 
     }
+
+    
 }

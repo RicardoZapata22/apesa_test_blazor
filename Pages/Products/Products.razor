@@ -9,10 +9,10 @@
             Agregar
         </button>
     </div>
-    <div class="table drawer">
+    <div class="table">
         <div class="headers">
             @foreach (var header in headers_table){
-                <div class="header drawer">
+                <div class="header">
                     @header
                 </div>
             }
@@ -25,15 +25,21 @@
                     {
                         <div class="column">
                             @property.GetValue(product)
+                            @if(property.PropertyType == typeof(double)){
+                                <label>%</label>
+                            }
                         </div>
                     }
+                    <div class="column actions">
+                        <i class='bx bxs-edit'></i>
+                    </div>
                 </div>
             }
         </div>
     </div>
 </main>
 
-<div class="modal fade" tabindex="-1" id="productModal" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="productModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -41,13 +47,29 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
-
-        </form>
+        <div class="input-group">
+            <input type="text" class="form-control" id="name" aria-describedby="basic-addon3 basic-addon4">
+        </div>
+        <div class="type">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Tipo de producto
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Tarjeta</a></li>
+                    <li><a class="dropdown-item" href="#">Préstamo</a></li>
+                    <li><a class="dropdown-item" href="#" >Hipotecario</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="input-group">
+            <input type="number" class="form-control" id="interes_rate" aria-describedby="basic-addon3 basic-addon4">
+            <span class="input-group-text">%</span>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-primary" @onclick="saveProduct">Guardar</button>
       </div>
     </div>
   </div>
@@ -63,11 +85,15 @@
         new Product("Product 5", "Auto", 8.30)
     };
 
-    private void addProduct(){
-
+    private void addRegister(){
+        @* this.newRegister = new Product("",""); *@
     }
 
     private void saveProduct(){
-        
+        @* this.products_list.Add(this.newRegister); *@
+    }
+
+    private void setTypeNewProduct(string type){
+        @* this.newRegister.type = type; *@
     }
 }
