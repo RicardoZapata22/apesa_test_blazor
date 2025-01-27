@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.sqlbook": "sql",
+        "*.ndjson": "jsonl",
+        "*.dbclient-js": "javascript",
+        "*.erd": "json",
+        "*.vuerd": "json",
+        "plyconfig.json": "jsonc"
+    }
+}
