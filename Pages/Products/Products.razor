@@ -1,13 +1,73 @@
 @page "/products"
+@using apesa_test.Interfaces
+
 <PageTitle>Products</PageTitle>
 
-<div class="actions">
-    <button type="button" class="btn btn-primary">Agregar</button>
-</div>
-<main class="body">
-    <div class="table">
-        <div class="header">
-            
+<main class="body drawer">
+    <div class="actions">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">
+            Agregar
+        </button>
+    </div>
+    <div class="table drawer">
+        <div class="headers">
+            @foreach (var header in headers_table){
+                <div class="header drawer">
+                    @header
+                </div>
+            }
+        </div>
+        <div class="body-table">
+            @foreach (var product in products_list)
+            {
+                <div class="register">
+                    @foreach(var property in product.GetType().GetProperties())
+                    {
+                        <div class="column">
+                            @property.GetValue(product)
+                        </div>
+                    }
+                </div>
+            }
         </div>
     </div>
 </main>
+
+<div class="modal fade" tabindex="-1" id="productModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nuevo Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@code{
+    private List<string> headers_table = ["Nombre","Tipo","Tasa Interes","Acciones"];
+    private List<Product> products_list = new List<Product>{
+        new Product("Product 1", "Tarjeta", 19.99),
+        new Product("Product 2", "Préstamo", 15.50),
+        new Product("Product 3", "Hipotecario", 10.75),
+        new Product("Product 4", "Personal", 12.40),
+        new Product("Product 5", "Auto", 8.30)
+    };
+
+    private void addProduct(){
+
+    }
+
+    private void saveProduct(){
+        
+    }
+}
