@@ -5,7 +5,7 @@
 
 <main class="body drawer">
     <div class="actions">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">
+        <button type="button" class="btn btn-primary" @onclick="addProduct" data-bs-toggle="modal" data-bs-target="#productModal">
             Agregar
         </button>
     </div>
@@ -39,43 +39,47 @@
     </div>
 </main>
 
-<div class="modal fade" data-bs-backdrop="static" id="productModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Nuevo Producto</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="input-group">
-            <input type="text" class="form-control" id="name" aria-describedby="basic-addon3 basic-addon4">
-        </div>
-        <div class="type">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Tipo de producto
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Tarjeta</a></li>
-                    <li><a class="dropdown-item" href="#">Préstamo</a></li>
-                    <li><a class="dropdown-item" href="#" >Hipotecario</a></li>
-                </ul>
+@if (newProduct != null) {
+    <div class="modal fade" data-bs-backdrop="static" id="productModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <input type="text" @bind="newProduct!.name" class="form-control" id="name" aria-describedby="basic-addon3 basic-addon4">
+                </div>
+                <div class="type">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Tipo de producto
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" >Tarjeta</a></li>
+                            <li><a class="dropdown-item" href="#" >Préstamo</a></li>
+                            <li><a class="dropdown-item" href="#">Hipotecario</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="number" @bind="newProduct!.interest_rate" class="form-control" id="interes_rate" aria-describedby="basic-addon3 basic-addon4">
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
             </div>
         </div>
-        <div class="input-group">
-            <input type="number" class="form-control" id="interes_rate" aria-describedby="basic-addon3 basic-addon4">
-            <span class="input-group-text">%</span>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" @onclick="saveProduct">Guardar</button>
-      </div>
     </div>
-  </div>
-</div>
+}
 
 @code{
+
+    private Product? newProduct = null;
     private List<string> headers_table = ["Nombre","Tipo","Tasa Interes","Acciones"];
     private List<Product> products_list = new List<Product>{
         new Product("Product 1", "Tarjeta", 19.99),
@@ -85,15 +89,15 @@
         new Product("Product 5", "Auto", 8.30)
     };
 
-    private void addRegister(){
-        @* this.newRegister = new Product("",""); *@
+    private void addProduct(){
+        this.newProduct = new Product();
     }
 
     private void saveProduct(){
-        @* this.products_list.Add(this.newRegister); *@
+        this.products_list.Add(this.newProduct!);
     }
 
     private void setTypeNewProduct(string type){
-        @* this.newRegister.type = type; *@
+        this.newProduct!.type = type;
     }
 }
