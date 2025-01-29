@@ -1,77 +1,154 @@
 @page "/products"
+@using System.Text.Json
 @using apesa_test.Interfaces
+@using apesa_test.Utils
+@inject HttpClient Http
+@inject IJSRuntime jsRuntime
 
-<PageTitle>Products</PageTitle>
+<PageTitle>Productos</PageTitle>
 
-<main class="body drawer">
-    <div class="actions">
-        <button type="button" class="btn btn-primary" @onclick="addProduct" data-bs-toggle="modal" data-bs-target="#productModal">
-            Agregar
-        </button>
-    </div>
-    <div class="table">
-        <div class="headers">
-            @foreach (var header in headers_table){
-                <div class="header">
-                    @header
-                </div>
-            }
+<main class="container">
+    @if(is_loading){
+        <div class="loader-container">
+            <span class="loader"></span>
+            Cargando registros...
         </div>
-        <div class="body-table">
-            @foreach (var product in products_list)
-            {
-                <div class="register">
-                    @foreach(var property in product.GetType().GetProperties())
+    } else {
+        <h2>Catálogo de Productos</h2>
+        <div class="actions">
+            <button type="button" @onclick="AddProduct" class="add-button">
+                <i class='bx bx-plus'></i>
+            </button>
+        </div>
+        <div class="table">
+            <div class="headers">
+                @foreach (var header in headers_table)
+                {
+                    <div class="header @header.ClassList">
+                        @header.Label
+                    </div>
+                }
+            </div>
+            <div class="body-table">
+                @if (products_list.Count() == 0)
+                {
+                    <div class="no-registers">
+                        No hay registros
+                    </div>
+                }
+                @foreach (var product_item in products_list)
+                {
+                    <div class="register" @onclick="(() => EditProduct(product_item))">
+                        @{int i = 0;}
+                        @foreach (var property in product_item.GetType().GetProperties())
+                        {
+                            <div class="column @headers_table[i].ClassList">
+                                @property.GetValue(product_item)
+                                @if (property.PropertyType == typeof(double))
+                                {
+                                    <label>%</label>
+                                }
+                            </div>
+                            i++;
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</main>
+
+@if (product != null) {
+    <div class="modal fade" data-bs-backdrop="static" id="productModal" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        @if(product.ProductId == "")
+                        {
+                            @("Nuevo Producto") 
+                        }
+                        else
+                        {
+                            @($"{product.ProductId} - {product.Name}")
+                        }
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body @(is_loading_product ? "disabled" : "")">
+                    <div class="mb-3">
+                        <div class="type">
+                            <label>Selecciona el tipo de producto</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if(product_type_selected == ""){
+                                        @("Tipo Producto")
+                                    } else {
+                                        @product_type_selected;
+                                    }
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @foreach (var product_type in product_types)
+                                    {
+                                        <li class="dropdown-item" @onclick="(() => SetTypeNewProduct(product_type))">@product_type</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    @if (product_type_selected != ""){
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre Poducto</label>
+                            <input type="text" placeholder="Ejemplo: Credito esencial plus" @bind="product!.Name" class="form-control" id="name" aria-describedby="basic-addon3 basic-addon4">
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tasa de interes</label>
+                            <div class="input-group">
+                                <input type="number" placeholder="15.5" @bind="product!.InterestRate" class="form-control" id="interes_rate" aria-describedby="basic-addon3 basic-addon4">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                    }
+                    @if (product.ProductId != "")
                     {
-                        <div class="column">
-                            @property.GetValue(product)
-                            @if(property.PropertyType == typeof(double)){
-                                <label>%</label>
+                        <section class="danger-zone">
+                            <h5 class="danger">
+                                Zona de Peligro
+                            </h5>
+                            <small>Se eliminará el registro de forma permanente</small>
+                            <br/>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-danger" type="button" @onclick="DeleteProduct">Eliminar Registro</button>
+                            </div>
+
+                        </section>
+                    }
+                </div>
+                <div class="modal-footer">
+                    @if(is_loading_product){
+                        <div class="loader-container">
+                            <span class="loader"></span>
+                            @if(product.ProductId == ""){
+                                @("Creando producto...")
+                            } else {
+                                @("Actualizando producto...")
                             }
                         </div>
                     }
-                    <div class="column actions">
-                        <i class='bx bxs-edit'></i>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</main>
-
-@if (newProduct != null) {
-    <div class="modal fade" data-bs-backdrop="static" id="productModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nuevo Producto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <input type="text" @bind="newProduct!.name" class="form-control" id="name" aria-describedby="basic-addon3 basic-addon4">
-                </div>
-                <div class="type">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Tipo de producto
+                    @if(is_loading_product == false){
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary @IsValidProduct()" @onclick="SaveProduct">
+                            @if (product.ProductId == "")
+                            {
+                                @("Crear")
+                            }
+                            else
+                            {
+                                @("Guardar")
+                            }
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" >Tarjeta</a></li>
-                            <li><a class="dropdown-item" href="#" >Préstamo</a></li>
-                            <li><a class="dropdown-item" href="#">Hipotecario</a></li>
-                        </ul>
-                    </div>
+                    }
                 </div>
-                <div class="input-group">
-                    <input type="number" @bind="newProduct!.interest_rate" class="form-control" id="interes_rate" aria-describedby="basic-addon3 basic-addon4">
-                    <span class="input-group-text">%</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
-            </div>
             </div>
         </div>
     </div>
@@ -79,25 +156,179 @@
 
 @code{
 
-    private Product? newProduct = null;
-    private List<string> headers_table = ["Nombre","Tipo","Tasa Interes","Acciones"];
-    private List<Product> products_list = new List<Product>{
-        new Product("Product 1", "Tarjeta", 19.99),
-        new Product("Product 2", "Préstamo", 15.50),
-        new Product("Product 3", "Hipotecario", 10.75),
-        new Product("Product 4", "Personal", 12.40),
-        new Product("Product 5", "Auto", 8.30)
+    private IProduct? product = null;
+    private string product_type_selected = "";
+    private dynamic[] headers_table;
+    private List<string> product_types = [];
+    private List<IProduct> products_list = [];
+    private string modal_state = "hide";
+    private bool is_loading = true;
+    private bool is_loading_product = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.headers_table = new dynamic[4]{
+            new { Label = "Clave", ClassList = "text-center" },
+            new { Label = "Nombre", ClassList = "" },
+            new { Label = "Tipo", ClassList = "text-center" },
+            new { Label = "Tasa Interes", ClassList = "text-center" }
     };
+        this.product_type_selected = "";
+        this.product_types = [
+          "Hipoteca",
+      "Cuenta de ahorro",
+      "Tarjeta de credito",
+      "Fondo de inversion",
+      "Prestamo personal",
+      "Cuenta corriente",
+      "Leasing",
+      "Deposito a plazo",
+      "Hipoteca",
+      "Tarjeta de debito",
+      "Fondo de inversion",
+      "Prestamo estudiantil",
+      "Cuenta nomina",
+      "Credito automotriz",
+      "Fondo de inversion",
+      "Prestamo personal",
+      "Cuenta de ahorro",
+      "Tarjeta de credito",
+      "Deposito a plazo",
+      "Credito empresarial"
+            ];
 
-    private void addProduct(){
-        this.newProduct = new Product();
+        await this.load_products_list();
     }
 
-    private void saveProduct(){
-        this.products_list.Add(this.newProduct!);
+    private async Task load_products_list(){
+        try
+        {
+            this.is_loading = true;
+            await Task.Delay(5000);
+            this.products_list = await Http.GetFromJsonAsync<List<IProduct>>("sample-data/products_list.json");
+            this.is_loading = false;
+            Console.WriteLine("Productos Cargados");
+        }
+        catch
+        {
+            this.products_list = [];
+            this.is_loading = false;
+        }
     }
 
-    private void setTypeNewProduct(string type){
-        this.newProduct!.type = type;
+
+    private async void AddProduct(){
+        this.product = new IProduct();
+        this.product_type_selected = "";
+        await jsRuntime.InvokeVoidAsync("toggleModalProduct","show");
+        StateHasChanged();
     }
+
+    private async void EditProduct(IProduct product){
+        this.product = (IProduct)product.Clone();
+        this.product_type_selected = this.product.ProductType!;
+        await jsRuntime.InvokeVoidAsync("toggleModalProduct", "show");
+        StateHasChanged();
+    }
+
+    private async void SaveProduct(){
+        this.is_loading_product = true;
+        if(this.product.ProductId == ""){
+            this.is_loading_product = true;
+            this.products_list.Insert(0,this.product!);
+            this.product.ProductId = GenericUtils.GenerateUniqueId();
+            await Task.Delay(3000);
+            await jsRuntime.InvokeVoidAsync("showToast", "Registro agregado");
+        } else {
+            IProduct product_update = this.products_list.FirstOrDefault(product => product.ProductId == this.product.ProductId);
+
+            if(product_update != null) {
+                product_update.ProductType = this.product.ProductType;
+                product_update.Name = this.product.Name;
+                product_update.InterestRate = this.product.InterestRate;
+                await Task.Delay(3000);
+                await jsRuntime.InvokeVoidAsync("showToast", "Registro actualizado");
+            }
+        }
+
+        this.is_loading_product = false;
+        await jsRuntime.InvokeVoidAsync("toggleModalProduct", "hide");
+        this.product = null;
+    }
+
+    private void SetTypeNewProduct(string type){
+        this.product_type_selected = type;
+        this.product!.ProductType = type;
+    }
+
+    private async void DeleteProduct(){
+        bool confirm = await jsRuntime.InvokeAsync<bool>("confirmAction", this.product.Name);
+        
+        if(confirm) {
+            int index = this.products_list.FindIndex(product => product.ProductId == this.product.ProductId);
+            this.products_list.RemoveAt(index);
+            await jsRuntime.InvokeVoidAsync("toggleModalProduct", "hide");
+            this.product = null;
+            StateHasChanged();
+            await jsRuntime.InvokeVoidAsync("showToast", "Registro eliminado");
+        }
+
+    }
+
+    private string IsValidProduct(){
+        if(this.product == null){
+            return "";
+        }
+        return string.IsNullOrEmpty(this.product.ProductType) || string.IsNullOrEmpty(this.product.Name) ? "disabled" : "";
+    }
+
 }
+
+<script>
+    let modal = null;
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = swal.stopTimer;
+        toast.onmouseleave = swal.resumeTimer;
+      }
+    });
+    function toggleModalProduct(type){
+        setTimeout(() => {
+            if(!modal){
+                modal = new bootstrap.Modal("#productModal");
+            }
+
+            if(type == "show")
+            {
+                modal.show();
+            } else {
+                modal.hide();
+                modal = null;
+            }
+        },0)
+    }
+
+    async function confirmAction(product_name){
+        const result = await Swal.fire({
+            text: `¿Desea eliminar el registro ${product_name}?`,
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Eliminar',
+            confirmButtonColor: '#f00'
+        })
+        return result.isConfirmed;
+    }
+
+    function showToast(text){
+            toast.fire({
+              icon: "success",
+              title: text
+            });
+    }
+</script>
