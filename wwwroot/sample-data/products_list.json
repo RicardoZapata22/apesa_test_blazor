@@ -1,0 +1,122 @@
+[
+    {
+        "product_id": "a1b2c3",
+        "name": "Credito Hipotecario Premium",
+        "interest_rate": 8.5,
+        "product_type": "hipoteca"
+    },
+    {
+        "product_id": "d4e5f6",
+        "name": "Cuenta de Ahorro Plus",
+        "interest_rate": 2.3,
+        "product_type": "cuenta de ahorro"
+    },
+    {
+        "product_id": "g7h8i9",
+        "name": "Tarjeta de Credito Gold",
+        "interest_rate": 29.9,
+        "product_type": "tarjeta de credito"
+    },
+    {
+        "product_id": "j1k2l3",
+        "name": "Fondo de Inversion Conservador",
+        "interest_rate": 5.4,
+        "product_type": "fondo de inversion"
+    },
+    {
+        "product_id": "m4n5o6",
+        "name": "Prestamo Personal Express",
+        "interest_rate": 15.7,
+        "product_type": "prestamo personal"
+    },
+    {
+        "product_id": "p7q8r9",
+        "name": "Cuenta Corriente Empresarial",
+        "interest_rate": 1.2,
+        "product_type": "cuenta corriente"
+    },
+    {
+        "product_id": "s1t2u3",
+        "name": "Leasing Vehicular",
+        "interest_rate": 7.8,
+        "product_type": "leasing"
+    },
+    {
+        "product_id": "v4w5x6",
+        "name": "Deposito a Plazo Fijo 12M",
+        "interest_rate": 6.2,
+        "product_type": "deposito a plazo"
+    },
+    {
+        "product_id": "y7z8a9",
+        "name": "Credito Hipotecario Estandar",
+        "interest_rate": 9.0,
+        "product_type": "hipoteca"
+    },
+    {
+        "product_id": "b1c2d3",
+        "name": "Tarjeta de Debito Premium",
+        "interest_rate": 0.0,
+        "product_type": "tarjeta de debito"
+    },
+    {
+        "product_id": "e4f5g6",
+        "name": "Fondo de Inversion Moderado",
+        "interest_rate": 7.1,
+        "product_type": "fondo de inversion"
+    },
+    {
+        "product_id": "h7i8j9",
+        "name": "Prestamo Estudiantil Universitario",
+        "interest_rate": 5.9,
+        "product_type": "prestamo estudiantil"
+    },
+    {
+        "product_id": "k1l2m3",
+        "name": "Cuenta Nomina Ejecutiva",
+        "interest_rate": 1.5,
+        "product_type": "cuenta nomina"
+    },
+    {
+        "product_id": "n4o5p6",
+        "name": "Credito Automotriz Smart",
+        "interest_rate": 10.3,
+        "product_type": "credito automotriz"
+    },
+    {
+        "product_id": "q7r8s9",
+        "name": "Fondo de Inversion Agresivo",
+        "interest_rate": 9.8,
+        "product_type": "fondo de inversion"
+    },
+    {
+        "product_id": "t1u2v3",
+        "name": "Prestamo Rapido Online",
+        "interest_rate": 20.5,
+        "product_type": "prestamo personal"
+    },
+    {
+        "product_id": "w4x5y6",
+        "name": "Cuenta de Ahorro Infantil",
+        "interest_rate": 3.2,
+        "product_type": "cuenta de ahorro"
+    },
+    {
+        "product_id": "z7a8b9",
+        "name": "Tarjeta de Credito Platinum",
+        "interest_rate": 25.6,
+        "product_type": "tarjeta de credito"
+    },
+    {
+        "product_id": "c1d2e3",
+        "name": "Deposito a Plazo Fijo 24M",
+        "interest_rate": 7.0,
+        "product_type": "deposito a plazo"
+    },
+    {
+        "product_id": "f4g5h6",
+        "name": "Credito Empresarial Flex",
+        "interest_rate": 12.4,
+        "product_type": "credito empresarial"
+    }
+]
