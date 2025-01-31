@@ -2,8 +2,7 @@
     height: 100vh;
     width:100vw;
 
-    .add-button
-        {
+    .add-button{
             position: absolute;
             height: 60px;
             width: 60px;
@@ -18,10 +17,11 @@
             right: 0;
             box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
             transition: all .3s ease-in-out;
-            &:hover{
-                        background: #0c2462;
-                    }
-               }
+        }
+
+    .add-button:hover {
+        background: #0c2462;
+    }
 
     .actions{
         position:relative;
