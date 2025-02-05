@@ -24,12 +24,12 @@ namespace TestProducts
             page_products.WaitForState(() => page_products.FindAll("#productModal").Count > 0, timeout: TimeSpan.FromSeconds(5));
 
             var firstProductType = page_products.Find("li.dropdown-item");
-            firstProductType.Click();
+            //firstProductType.Click();
             page_products.WaitForState(() => page_products.FindAll("#name").Count > 0, timeout: TimeSpan.FromSeconds(5));
 
 
             var name_product_input = page_products.Find("#name");
-            name_product_input.Change("Prestamo prueba");
+            name_product_input.Change("Prestamo prueba2");
 
             Assert.That(name_product_input.GetAttribute("value"), Is.EqualTo("Prestamo prueba"), "El campo de nombre debería contener el texto ingresado.");
         }
