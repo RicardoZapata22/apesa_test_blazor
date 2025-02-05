@@ -168,34 +168,34 @@
     protected override async Task OnInitializedAsync()
     {
         this.headers_table = new dynamic[4]{
-            new { Label = "Clave", ClassList = "text-center" },
-            new { Label = "Nombre", ClassList = "" },
-            new { Label = "Tipo", ClassList = "text-center" },
-            new { Label = "Tasa Interes", ClassList = "text-center" }
-    };
+                new { Label = "Clave", ClassList = "text-center" },
+                new { Label = "Nombre", ClassList = "" },
+                new { Label = "Tipo", ClassList = "text-center" },
+                new { Label = "Tasa Interes", ClassList = "text-center" }
+        };
         this.product_type_selected = "";
         this.product_types = [
           "Hipoteca",
-      "Cuenta de ahorro",
-      "Tarjeta de credito",
-      "Fondo de inversion",
-      "Prestamo personal",
-      "Cuenta corriente",
-      "Leasing",
-      "Deposito a plazo",
-      "Hipoteca",
-      "Tarjeta de debito",
-      "Fondo de inversion",
-      "Prestamo estudiantil",
-      "Cuenta nomina",
-      "Credito automotriz",
-      "Fondo de inversion",
-      "Prestamo personal",
-      "Cuenta de ahorro",
-      "Tarjeta de credito",
-      "Deposito a plazo",
-      "Credito empresarial"
-            ];
+          "Cuenta de ahorro",
+          "Tarjeta de credito",
+          "Fondo de inversion",
+          "Prestamo personal",
+          "Cuenta corriente",
+          "Leasing",
+          "Deposito a plazo",
+          "Hipoteca",
+          "Tarjeta de debito",
+          "Fondo de inversion",
+          "Prestamo estudiantil",
+          "Cuenta nomina",
+          "Credito automotriz",
+          "Fondo de inversion",
+          "Prestamo personal",
+          "Cuenta de ahorro",
+          "Tarjeta de credito",
+          "Deposito a plazo",
+          "Credito empresarial"
+        ];
 
         await this.load_products_list();
     }
